@@ -6,5 +6,9 @@
       "Bash(.venv/bin/python -m pytest -q)",
       "Bash(grep -n \"make dev\\\\|^pytest\\\\| pytest$\\\\|run on the host\\\\|host uvicorn\" README.md)"
     ]
+  },
+  "enabledPlugins": {
+    "context7@claude-plugins-official": true,
+    "ponytail@ponytail": true
   }
 }
