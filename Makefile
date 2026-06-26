@@ -28,5 +28,5 @@ fmt:            ## format code with black
 test:           ## run the test suite
 	pytest
 
-remove:         ## force-remove the Docker containers
-	docker rm -f finance_backend_api finance_backend_db finance_backend_adminer
+remove:         ## stop and force-remove the stack's containers
+	docker compose rm -fs

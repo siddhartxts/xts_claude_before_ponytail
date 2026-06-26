@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     single, documented place for configuration."""
 
     # Maps to the SQLALCHEMY_DATABASE_URL env var (matching is case-insensitive).
-    sqlalchemy_database_url: str 
+    sqlalchemy_database_url: str
 
     model_config = SettingsConfigDict(
         env_file=".env",

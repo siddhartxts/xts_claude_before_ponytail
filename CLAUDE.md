@@ -11,7 +11,6 @@ A clean, minimal **FastAPI + PostgreSQL + Alembic** backend template. It ships t
 Whenever working with any third-party library or something similar, you MUST look up the official documentation to ensure that you're working with up-to-date information.
 
 Use the DocsExplorer subagent for efficient documentation lookup.
-Note: the codebase was reset from a prior finance app. Some infra names still carry that history (Docker `container_name`s are `finance_backend_api`/`_db`/`_adminer`; `models.py` mentions removed `WatchlistItem`/`FinanceNote` tables). Nothing depends on the `finance` naming.
 
 ## Commands
 
@@ -47,7 +46,7 @@ Request flow: `main.py` creates the app and includes the health router → route
 - **`src/main.py`** — creates `app` and includes the `health` router. Nothing else is wired yet.
 - **`src/models.py`** — re-exports the SQLAlchemy declarative `Base` (from `database`). **No application tables are defined yet**; add ORM models here. `models.Base` must stay importable because Alembic's `env.py` uses `models.Base.metadata` and the tests `import models` to register tables.
 - **`src/schemas.py`** — Pydantic v2 request/response models. Currently empty; add schemas as endpoints are built.
-- **`src/deps.py`** — shared dependencies for reuse by future routers: `db_dependency` (injected `Session`), `get_or_404(db, Model, item_id, detail)`, and `Pagination`/`PaginationParams` (`?limit=&offset=`, defaults limit 50, max 200).
+- **`src/deps.py`** — shared FastAPI dependencies: `db_dependency` (an injected `Session`). Add more shared dependencies here as routers need them.
 - **`src/database.py`** — `engine` / `SessionLocal` / `Base` and the `get_db` generator dependency.
 - **`src/config.py`** — `pydantic-settings` `Settings`; the only setting is `sqlalchemy_database_url` (env var `SQLALCHEMY_DATABASE_URL`, loaded from `.env` if present). Add new config as typed fields here.
 
@@ -67,7 +66,7 @@ Request flow: `main.py` creates the app and includes the health router → route
 
 ## Configuration
 
-Copy `.env.example` → `.env` (gitignored). Key vars: `SQLALCHEMY_DATABASE_URL` (host `db` inside Docker, `localhost` for host-based runs), Postgres credentials (`POSTGRES_USER`/`_PASSWORD`/`_DB`), and the published host ports (`API_PORT`, `POSTGRES_PORT`, `ADMINER_PORT`). All dependencies — runtime plus dev/test tools (`pytest`, `pytest-asyncio`, `black`) — live in a single `requirements.txt`, so they are present in the Docker image too (this is what lets `docker compose run --rm api pytest` work).
+Copy `.env.example` → `.env` (gitignored). Key vars: `SQLALCHEMY_DATABASE_URL` (host `db` inside Docker, `localhost` for host-based runs), Postgres credentials (`POSTGRES_USER`/`_PASSWORD`/`_DB`), and the published host ports (`API_PORT`, `POSTGRES_PORT`, `ADMINER_PORT`). All dependencies — runtime plus dev/test tools (`pytest`, `black`) — live in a single `requirements.txt`, so they are present in the Docker image too (this is what lets `docker compose run --rm api pytest` work).
 
 ## Adding a feature
 
