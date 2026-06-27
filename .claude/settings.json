@@ -10,5 +10,18 @@
   "enabledPlugins": {
     "context7@claude-plugins-official": true,
     "ponytail@ponytail": true
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(jq -r '.tool_input.file_path // empty'); case \"$f\" in *.py) \"$CLAUDE_PROJECT_DIR/.venv/bin/python\" -m black --quiet \"$f\" 2>/dev/null || true;; esac"
+          }
+        ]
+      }
+    ]
   }
 }
